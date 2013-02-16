@@ -21,14 +21,14 @@ abort "Please prepare porter" if !Porter.prepared?
 
 case action
 when nil
-  Porter.interfaces
-  Porter.list
+  Porter.print_interfaces
+  Porter.print_forwards
   
 when "-l"
-  Porter.list
+  Porter.print_forwards
 
 when "-i"
-  Porter.interfaces
+  Porter.print_interfaces
 
 when "-d"
   abort usage if ARGV[1].nil?
