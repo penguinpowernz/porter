@@ -51,9 +51,9 @@ module Porter
     end
     
     def print_forwards
-      puts "Red Port\tGreen Host\tGreen Port"
+      puts "Red Port".ljust(20)+"Green Host".ljust(20)+"Green Port"
       Porter::PortForward.all.each do |pf|
-        puts "#{pf.red_port}\t#{pf.green_host}\t#{pf.green_port}"
+        puts pf.red_port.to_s.ljust(20)+pf.green_host.ljust(20)+pf.green_port
       end
     end
     
