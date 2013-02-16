@@ -22,10 +22,21 @@ module Porter
 
     def enable(iptables)
       rules.each {|rule| iptables.add rule }
+      
+      # add this forward to the store
+      File.open(Porter.store, "a") {|f|
+        f.puts [@red_port, @green_host, @green_port].join(" ")
+      }
     end
 
     def disable(iptables)
       rules.each {|rule| iptables.delete rule }
+      
+      # Remove the line for this red_port and save the file
+      store = File.read(Porter.store).lines.reject{ |line| 
+        line.start_with?(@red_port)
+      }.join '\n'
+      File.open(Porter.store, "w") {|f| f.puts store }
     end
 
     def self.build(line)
