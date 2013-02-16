@@ -1,32 +1,34 @@
 module Porter
   class PortForward
 
-    attr_reader :local_port, :remote_host, :remote_port
+    def initialize(red_port, green_host, green_port)
+      @red_port = red_port
+      @green_host = green_host
+      @green_port = green_port.sub("u","") # remove u just incase
+    end
 
-    def initialize(local_port, remote_host, remote_port)
-      @local_port = local_port
-      @remote_host = remote_host
-      @remote_port = remote_port
+    def rules
+      @protocol = @red_port.start_with?("u") ? "udp" : "tcp"
+      @red_port.sub!("u","")
+
+      [
+        "PREROUTING -t nat -i #{Porter.interfaces(:red)} -p #{@protocol} --dport #{@red_port} -j DNAT --to-destination #{@green_host}:#{@green_port}",
+        "INPUT -p #{@protocol} -m state --state NEW --dport #{@red_port} -i #{Porter.interfaces(:red)} -j ACCEPT",
+        "FORWARD -p tcp -d #{@green_host} --dport #{@green_port} -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT",
+        "POSTROUTING -p #{@protocol} -m #{@protocol} -s #{@green_host} --sport #{@green_port} -o #{Porter.interfaces(:red)} -j SNAT"
+      ]
+    end
+
+    def enable(iptables)
+      rules.each {|rule| iptables.add rule }
+    end
+
+    def disable(iptables)
+      rules.each {|rule| iptables.delete rule }
     end
 
     def self.build(line)
       self.new *line.split(" ")
-    end
-
-    def enable(iptables)
-      rules = [
-        "-A PREROUTING -t nat -i eth1 -p tcp --dport #{@local_port} -j DNAT --to #{@remote_host}:#{@remote_port}",
-        "-A PREROUTING -t nat -i eth1 -p udp --dport #{@local_port} -j DNAT --to #{@remote_host}:#{@remote_port}",
-        "-A INPUT -p tcp -m state --state NEW --dport #{@local_port} -i eth1 -j ACCEPT"
-      ]
-
-      rules.each do |rule|
-        iptables.run rule
-      end
-    end
-
-    def disable
-
     end
 
     def self.all
