@@ -1,0 +1,30 @@
+#!/usr/bin/ruby
+
+def usage
+  <<-EOU
+Usage: porter <action> [<local_port> <remote_host> <remote_port>]
+
+Exampes:
+  porter -e 8080 192.168.1.254 80    Forwards port 8080 to 192.168.1.1:80
+  porter -d 8080                     Unforwards port 8080
+  porter -l                          Lists all the port forwards
+  EOU
+end
+
+action = ARGV[0]
+local_port, remote_host, remote_port = *ARGV[1..3]
+
+case action
+when "-l"
+  Porter.list
+
+when "-d"
+  Porter.disable(local_port)
+
+when "-e"
+  Porter.enable(local_port, remote_host, remote_port)
+
+else
+  abort "Invalid action: #{action}"
+
+end
