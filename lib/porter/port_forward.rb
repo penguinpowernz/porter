@@ -5,7 +5,7 @@ module Porter
     def initialize(red_port, green_host, green_port)
       @red_port = red_port
       @green_host = green_host
-      @green_port = green_port.sub("u","") # remove u just incase
+      @green_port = green_port.sub("u","") # remove u just incase as udp set by red_port
     end
 
     def rules
