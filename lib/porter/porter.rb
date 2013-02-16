@@ -3,24 +3,34 @@ require 'porter/ip_tables'
 
 module Porter
   class << self
-  	def enable(local_port, remote_host, remote_port)
+  
+    def prepare(red, green)
+    
+    end
+  
+  	def add(red_port, green_host, green_port)
       Porter::PortForward.new(
-      	local_port, 
-      	remote_host, 
-      	remote_port
-      ).enable Porter::IpTables
+      	red_port, 
+      	green_host, 
+      	green_port
+      ).enable( Porter::IpTables )
+      
   	end
 
-  	def disable(local_port)
-
+  	def delete(red_port)
+      Porter::PortForward.find( red_port ).disable( Porter::IpTables )
   	end
 
   	def list
-	  puts "Local Port\tRemote Host\tRemote Port"
-	  Porter::PortForward.all.each do |pf|
-	  	puts "#{pf.local_port}\t#{pf.remote_host}\t#{remote_port}"
-	  end
+  	  puts "Red Port\tGreen Host\tGreen Port"
+  	  Porter::PortForward.all.each do |pf|
+  	  	puts "#{pf.red_port}\t#{pf.green_host}\t#{pf.green_port}"
+  	  end
   	end
+    
+    def interfaces
+    
+    end
 
   	def disable_all
       Porter::PortForward.all.each do |pf|
