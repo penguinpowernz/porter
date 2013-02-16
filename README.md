@@ -36,6 +36,7 @@ Or you want to allow clients to connect to an OpenVPN server inside the network 
 You can remove a port forward that is sending port 80 traffic to a server on port 8080:
 
     $ porter -d 80
+    $ porter -du 9945
     
 ## Get porter status
 
@@ -44,8 +45,8 @@ You can see all the port forwards on the machine by doing this:
     $ porter -l
     Red Port    Green Host     Green Port
     222         10.0.0.254     22
-    9944        10.0.0.250     1194
-    9945        10.0.0.251     1194
+    u9944       10.0.0.250     1194
+    u9945       10.0.0.251     1194
     80          10.0.0.254     8080
     2245        10.0.0.100     22
 
@@ -60,10 +61,9 @@ Or do `porter` by itself to get both:
     $ porter
     Red interface:         ppp0
     Green interface(s):    eth1,tun1
-    
     Red Port    Green Host     Green Port
     222         10.0.0.254     22
-    9944        10.0.0.250     1194
-    9945        10.0.0.251     1194
+    u9944       10.0.0.250     1194
+    u9945       10.0.0.251     1194
     80          10.0.0.254     8080
     2245        10.0.0.100     22
