@@ -1,4 +1,5 @@
 module Porter
+  class PortNotForwardedError < StandardError; end
   class PortForward
 
     def initialize(red_port, green_host, green_port)
@@ -41,6 +42,12 @@ module Porter
 
     def self.build(line)
       self.new *line.split(" ")
+    end
+
+    def self.find(red_port)
+      line = `grep -P "^#{red_port}" #{Porter.store}`.chomp
+      raise PortNotForwardedError if $?.exitstatus != 0
+      self.build line
     end
 
     def self.all
