@@ -21,6 +21,23 @@ module Porter
       Porter.interfaces("green", green)
     end
     
+    # Check if porter has been prepared
+    def prepared?
+
+      # forwarded enabled in kernel?
+      return false if `/sbin/sysctl net.ipv4.ip_forward`.include? "0"
+
+      # porter interfaces set?
+      return false if Porter.interfaces.empty?
+
+      # each interface can forward packets
+      Porter.interfaces.each do |if|
+        return false if File.read("/proc/sys/net/ipv4/conf/#{if}/forwarding").include? "0"
+      end
+      
+      true
+    end
+    
     def add(red_port, green_host, green_port)
       Porter::PortForward.new(
         red_port, 
