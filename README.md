@@ -5,6 +5,24 @@ Porter
 
 ## Prepare your system
 
+### First things first
+
+You need to set your IP Tables to have a default drop policy.  **Be sure to allow SSH access first or you could lock yourself out!**
+
+Allow your SSH access first if you don't have a screen and keyboard to use:
+
+    $ iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+    $ iptables -A OUTPUT -p tcp -m tcp --sport 22 -j ACCEPT
+    
+Now you need to set the default policy to drop:
+
+    $ iptables -P INPUT DROP
+    $ iptables -P OUTPUT DROP
+    
+This will lock everything down so only the ports you tell porter to open and your SSH port will be accessible.
+
+### Preparing porter
+
 You will need to setup your system first so porter knows which interface to accept forwards from and which interfaces it is allowed to forward over.
 
 This is done by specifying a red and a green device:
