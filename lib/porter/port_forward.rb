@@ -16,7 +16,7 @@ module Porter
         "INPUT -p #{@protocol} -m state --state NEW --dport #{@red_port} -i #{Porter.interfaces(:red)} -j ACCEPT",
         "FORWARD -p tcp -d #{@green_host} --dport #{@green_port} -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT",
         "POSTROUTING -p #{@protocol} -m #{@protocol} -s #{@green_host} --sport #{@green_port} -o #{Porter.interfaces(:red)} -j SNAT",
-        "OUTPUT -p #{protocol} -s #{@green_host} --sport #{@green_port} -o #{Porter.interfaces(:red)} -j ACCEPT"
+        "OUTPUT -p #{@protocol} -s #{@green_host} --sport #{@green_port} -o #{Porter.interfaces(:red)} -j ACCEPT"
       ]
     end
 
