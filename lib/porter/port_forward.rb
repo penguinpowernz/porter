@@ -12,10 +12,11 @@ module Porter
       @red_port.sub!("u","")
 
       [
-        "PREROUTING -t nat -i #{Porter.interfaces(:red)} -p #{@protocol} --dport #{@red_port} -j DNAT --to-destination #{@green_host}:#{@green_port}",
+        "PREROUTING -t nat -i #{Porter.interfaces(:red)} -p #{@protocol} --dport #{@red_port} -j DNAT --to #{@green_host}:#{@green_port}",
         "INPUT -p #{@protocol} -m state --state NEW --dport #{@red_port} -i #{Porter.interfaces(:red)} -j ACCEPT",
         "FORWARD -p tcp -d #{@green_host} --dport #{@green_port} -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT",
-        "POSTROUTING -p #{@protocol} -m #{@protocol} -s #{@green_host} --sport #{@green_port} -o #{Porter.interfaces(:red)} -j SNAT"
+        "POSTROUTING -p #{@protocol} -m #{@protocol} -s #{@green_host} --sport #{@green_port} -o #{Porter.interfaces(:red)} -j SNAT",
+        "OUTPUT -p #{protocol} -s #{@green_host} --sport #{@green_port} -o #{Porter.interfaces(:red)} -j ACCEPT"
       ]
     end
 
