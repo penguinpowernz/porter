@@ -1,6 +1,8 @@
 module Porter
   class PortForward
 
+    attr_reader :local_port, :remote_host, :remote_port
+
     def initialize(local_port, remote_host, remote_port)
       @local_port = local_port
       @remote_host = remote_host
@@ -10,20 +12,6 @@ module Porter
     def self.build(line)
       self.new *line.split(" ")
     end
-
-    def remote_host
-      @remote_host
-    end
-
-    def remote_port
-      @remote_port
-    end
-
-    def local_port
-      @local_port
-    end
-
-    def enable
 
     end
 
