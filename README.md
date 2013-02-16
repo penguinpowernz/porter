@@ -13,13 +13,13 @@ This is done by specifying a red and a green device:
 
 So you can make it so any traffic coming into the red interface on port 222 is forwarded to port 22 of a server on a green interface.
 
-To configure a single green and red interface you would do the following command:
+To configure a red (ppp0) and single green interface (eth0) you would do the following command:
 
-    $ porter -p -r ppp0 -g eth0
+    $ porter -p ppp0 eth0
 
 It is possible to specify multiple green interfaces if you want to port forward to machines on the local network and a VPN for instance:
 
-    $ porter -p -r eth1 -g eth0,tun0
+    $ porter -p eth1 eth0,tun0
 
 ## Forward a port
 
@@ -29,14 +29,14 @@ Say you want to make any traffic coming into the red interface on port 222 go to
     
 Or you want to allow clients to connect to an OpenVPN server inside the network over UDP, but using a non-standard port on the outside:
 
-    $ porter -au 9944 10.1.1.250 1194
+    $ porter -a u9944 10.1.1.250 1194
     
 ## Unforward a port
 
-You can remove a port forward that is sending port 80 traffic to a server on port 8080:
+You can remove a port forward by specifying the port that is forwarded:
 
     $ porter -d 80
-    $ porter -du 9945
+    $ porter -d u9945
     
 ## Get porter status
 
