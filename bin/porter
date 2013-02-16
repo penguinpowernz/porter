@@ -2,27 +2,46 @@
 
 def usage
   <<-EOU
-Usage: porter <action> [<local_port> <remote_host> <remote_port>]
+Usage: porter [action] [options]
 
 Exampes:
-  porter -e 8080 192.168.1.254 80    Forwards port 8080 to 192.168.1.1:80
+  porter                             Prints out interfaces and forwards
+  porter -p <red> <green[,green]>    Prepares porter by setting red and green interfaces(s)
+  porter -a 8080 192.168.1.254 80    Forwards port 8080 to 192.168.1.1:80
+  porter -a u53 192.168.1.254 5353   Forwards UDP port 53 to 192.168.1.1:5353
   porter -d 8080                     Unforwards port 8080
   porter -l                          Lists all the port forwards
+  porter -i                          Lists the interfaces porter uses
   EOU
 end
 
 action = ARGV[0]
-local_port, remote_host, remote_port = *ARGV[1..3]
+
+abort "Please prepare porter" if !Porter.prepared?
 
 case action
+when nil
+  Porter.interfaces
+  Porter.list
+  
 when "-l"
   Porter.list
 
-when "-d"
-  Porter.disable(local_port)
+when "-i"
+  Porter.interfaces
 
-when "-e"
-  Porter.enable(local_port, remote_host, remote_port)
+when "-d"
+  abort usage if ARGV[1].nil?
+  Porter.delete(ARGV[1])
+
+when "-a"
+  abort usage if ARGV[1].nil? or ARGV[2].nil? or ARGV[3].nil?
+  Porter.add(*ARGV[1..3])
+
+when "-p"
+  red, green = ARGV[1..2]
+  abort usage if red.include? "," # don't allow multiple red interfaces
+  Porter.prepare(red, green)
 
 else
   abort "Invalid action: #{action}"
