@@ -20,15 +20,16 @@ module Porter
       Porter::PortForward.find( red_port ).disable( Porter::IpTables )
     end
     
-    def list
+    def print_forwards
       puts "Red Port\tGreen Host\tGreen Port"
       Porter::PortForward.all.each do |pf|
         puts "#{pf.red_port}\t#{pf.green_host}\t#{pf.green_port}"
       end
     end
     
-    def interfaces
-    
+    def print_interfaces
+      puts "Red interface: #{Porter.interfaces('red')}"
+      puts "Green interface: #{Porter.interfaces('green')}"
     end
     
     def disable_all
