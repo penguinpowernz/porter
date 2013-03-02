@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+require 'porter'
+
 def usage
   <<-EOU
 Usage: porter [action] [options]

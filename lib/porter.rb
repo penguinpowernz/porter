@@ -42,3 +42,7 @@ module Porter
   end
 
 end
+
+require 'porter/port_forward'
+require 'porter/iptables'
+require 'porter/porter'
