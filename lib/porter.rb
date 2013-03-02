@@ -32,7 +32,7 @@ module Porter
       end
       
       if type.nil?
-        ifs << *Porter.config["porter"][:interfaces][:green].split(",")
+        ifs = Porter.config["porter"][:interfaces][:green].split(",")
         ifs << Porter.config["porter"][:interfaces][:red]
         return ifs
       end
